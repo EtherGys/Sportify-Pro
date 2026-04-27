@@ -89,74 +89,102 @@ onMounted(fetch)
 
 <template>
   <AppLayout>
-    <div v-if="isModalOpen" class="fixed inset-0 flex items-center justify-center bg-black/50">
-      <div class="bg-white p-6 rounded-xl w-96">
+    <div v-if="isModalOpen" class="fixed inset-0 flex items-end sm:items-center justify-center bg-black/50 p-3">
+      <div class="bg-white p-5 sm:p-6 rounded-2xl w-full max-w-md">
+        
         <h2 class="text-lg font-bold mb-4">Modifier la session</h2>
+
         <label class="block text-xs font-semibold text-slate-700">Nom</label>
-        <input v-model="form.title" class="w-full mb-2 p-2 border rounded" placeholder="Titre" />
+        <input v-model="form.title" class="w-full mb-2 p-2 border rounded-lg text-sm" placeholder="Titre" />
+
         <label class="block text-xs font-semibold text-slate-700">Description</label>
-        <textarea v-model="form.description" class="w-full mb-2 p-2 border rounded" placeholder="Description" />
+        <textarea v-model="form.description" class="w-full mb-2 p-2 border rounded-lg text-sm" placeholder="Description" />
 
         <label class="block text-xs font-semibold text-slate-700">Date</label>
-        <input v-model="form.date" type="datetime-local" class="w-full mb-2 p-2 border rounded" />
+        <input v-model="form.date" type="datetime-local" class="w-full mb-2 p-2 border rounded-lg text-sm" />
 
         <label class="block text-xs font-semibold text-slate-700">Durée</label>
-        <input v-model="form.duration" type="number" class="w-full mb-2 p-2 border rounded" placeholder="Durée (min)" />
+        <input v-model="form.duration" type="number" class="w-full mb-2 p-2 border rounded-lg text-sm" placeholder="Durée (min)" />
 
         <label class="block text-xs font-semibold text-slate-700">Nbr max de participants</label>
-        <input v-model="form.maxParticipants" type="number" class="w-full mb-2 p-2 border rounded"
-          placeholder="Max participants" />
-        <div class="flex justify-end gap-2 mt-4">
-          <button class="px-3 py-2 bg-gray-300 rounded" @click="isModalOpen = false">
+        <input v-model="form.maxParticipants" type="number" class="w-full mb-2 p-2 border rounded-lg text-sm" placeholder="Max participants" />
+
+        <div class="flex flex-col-reverse sm:flex-row justify-end gap-2 mt-4">
+          <button class="w-full sm:w-auto px-3 py-2 bg-gray-300 rounded-lg text-sm" @click="isModalOpen = false">
             Annuler
           </button>
-          <button class="px-3 py-2 bg-indigo-600 text-white rounded" @click="submitUpdate">
+          <button class="w-full sm:w-auto px-3 py-2 bg-indigo-600 text-white rounded-lg text-sm">
             Valider
           </button>
         </div>
+
       </div>
     </div>
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- CREATE -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
         <h1 class="text-xl font-bold text-slate-900">Créer une séance</h1>
-        <p class="mt-1 text-sm text-slate-600">Vous pouvez créer une séance de laquelle vous serez le coach.</p>
+        <p class="mt-1 text-sm text-slate-600">
+          Vous pouvez créer une séance de laquelle vous serez le coach.
+        </p>
+
         <div class="mt-4">
           <SessionForm submit-label="Créer" :is-loading="isCreating" @submit="onCreate" />
         </div>
       </div>
 
+      <!-- LIST -->
       <div class="space-y-4">
-        <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
           <h2 class="text-lg font-semibold text-slate-900">Mes séances</h2>
-          <p class="mt-1 text-sm text-slate-600">
-            Toutes mes séances
-          </p>
+          <p class="mt-1 text-sm text-slate-600">Toutes mes séances</p>
         </div>
 
-        <SessionCard v-for="s in sessionStore.items" :key="s.id" :session="s">
+        <SessionCard
+          v-for="s in sessionStore.items"
+          :key="s.id"
+          :session="s"
+        >
           <template #actions>
-            <div class="flex flex-wrap gap-2">
-              <button type="button"
-                class="rounded-xl bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
-                @click="openModal(s)">
+            <div class="flex flex-col sm:flex-row flex-wrap gap-2">
+
+              <button
+                type="button"
+                class="w-full sm:w-auto rounded-xl bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
+                @click="openModal(s)"
+              >
                 Modifier
               </button>
-              <button type="button"
-                class="rounded-xl bg-rose-600 px-3 py-2 text-sm font-semibold text-white hover:bg-rose-500"
-                @click="onDelete(s.id)">
+
+              <button
+                type="button"
+                class="w-full sm:w-auto rounded-xl bg-rose-600 px-3 py-2 text-sm font-semibold text-white hover:bg-rose-500"
+                @click="onDelete(s.id)"
+              >
                 Supprimer
               </button>
-              <RouterLink class="rounded-xl border border-slate-200 px-3 py-2 text-sm font-semibold hover:bg-slate-50"
-                :to="{ name: 'coach.participants', params: { id: s.id } }">
+
+              <RouterLink
+                class="w-full sm:w-auto text-center rounded-xl border border-slate-200 px-3 py-2 text-sm font-semibold hover:bg-slate-50"
+                :to="{ name: 'coach.participants', params: { id: s.id } }"
+              >
                 Voir les participants
               </RouterLink>
+
             </div>
           </template>
         </SessionCard>
-        <div v-if="sessionStore.items.length === 0"
-          class="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-600 shadow-sm">
+
+        <div
+          v-if="sessionStore.items.length === 0"
+          class="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-600 shadow-sm"
+        >
           Pas encore de séances à afficher.
         </div>
+
       </div>
     </div>
   </AppLayout>

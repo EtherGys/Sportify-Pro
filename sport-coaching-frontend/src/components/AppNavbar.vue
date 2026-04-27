@@ -47,9 +47,13 @@ async function onLogout() {
 
 <template>
   <header class="border-b border-slate-200 bg-white">
-    <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4">
+    <div class="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+      
       <div class="flex items-center gap-3">
-        <div class="h-9 w-9 rounded-xl bg-indigo-600 m-auto text-center pt-1 text-white">S</div>
+        <div class="h-9 w-9 rounded-xl bg-indigo-600 m-auto text-center pt-1 text-white">
+          S
+        </div>
+
         <div class="leading-tight">
           <div class="text-sm font-semibold text-slate-900">Sportify Pro</div>
           <div class="text-xs text-slate-500" v-if="authStore.user">
@@ -58,12 +62,13 @@ async function onLogout() {
         </div>
       </div>
 
-      <nav class="flex items-center gap-2">
+      <nav class="flex w-full items-center gap-2 overflow-x-auto whitespace-nowrap sm:w-auto sm:flex-wrap sm:overflow-visible">
+        
         <RouterLink
           v-for="link in links"
           :key="link.name"
           :to="link.to"
-          class="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
+          class="shrink-0 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100"
         >
           {{ link.name }}
         </RouterLink>
@@ -71,11 +76,12 @@ async function onLogout() {
         <button
           v-if="authStore.isAuthenticated"
           type="button"
-          class="rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+          class="shrink-0 rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800"
           @click="onLogout"
         >
           Déconnexion
         </button>
+
       </nav>
     </div>
   </header>

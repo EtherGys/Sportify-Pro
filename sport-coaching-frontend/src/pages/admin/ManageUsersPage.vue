@@ -56,72 +56,83 @@ onMounted(fetch)
 <template>
   <AppLayout>
     <div v-if="isModalOpen" class="fixed inset-0 flex items-center justify-center bg-black/50">
-  <div class="bg-white p-6 rounded-xl w-96">
-    <h2 class="text-lg font-bold mb-4">Modifier l'utilisateur</h2>
-    <input
-      v-model="formEmail"
-      type="email"
-      class="w-full mb-3 p-2 border rounded"
-      placeholder="Email"
-    />
-    <label class="block text-xs font-semibold text-slate-700">Rôle</label>
+      <div class="bg-white p-6 rounded-xl w-96">
+        <h2 class="text-lg font-bold mb-4">Modifier l'utilisateur</h2>
+        <input v-model="formEmail" type="email" class="w-full mb-3 p-2 border rounded" placeholder="Email" />
+        <label class="block text-xs font-semibold text-slate-700">Rôle</label>
         <select v-model="roleName" class="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm">
           <option :value="Role.CLIENT">CLIENT</option>
           <option :value="Role.COACH">COACH</option>
           <option :value="Role.ADMIN">ADMIN</option>
         </select>
-    <div class="flex justify-end gap-2 mt-4">
-      <button
-        class="px-3 py-2 bg-gray-300 rounded"
-        @click="isModalOpen = false"
-      >
-        Annuler
-      </button>
-      <button
-        class="px-3 py-2 bg-indigo-600 text-white rounded"
-        @click="submitUpdate"
-      >
-        Valider
-      </button>
-    </div>
-  </div>
-</div>
-    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <h1 class="text-xl font-bold text-slate-900">Gestion des utilisateurs</h1>
-      <p class="mt-2 text-sm text-slate-600">Gérer les comptes utilisateurs.</p>
-
-      <div v-if="userStore.isLoading" class="mt-4 text-sm text-slate-600">En cours...</div>
-
-      <div v-else class="mt-4 space-y-2">
-        <div
-          v-for="u in userStore.users"
-          :key="u.id"
-          class="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm"
-        >
-          <div>
-            <div class="font-semibold text-slate-900">{{ u.email }}</div>
-            <div class="text-slate-600">Rôle : {{ u.role }}</div>
-          </div>
-          <div>
-            <button
-            class="rounded-xl bg-indigo-600 px-3 py-2 text-xs font-semibold text-white hover:bg-indigo-500 m-2"
-            type="button"
-           @click="openModal(u)"
-            >
-            Modifier
+        <div class="flex justify-end gap-2 mt-4">
+          <button class="px-3 py-2 bg-gray-300 rounded" @click="isModalOpen = false">
+            Annuler
           </button>
-          <button
-          class="rounded-xl bg-rose-600 px-3 py-2 text-xs font-semibold text-white hover:bg-rose-500"
+          <button class="px-3 py-2 bg-indigo-600 text-white rounded" @click="submitUpdate">
+            Valider
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
+
+  <h1 class="text-xl font-bold text-slate-900">Gestion des utilisateurs</h1>
+  <p class="mt-2 text-sm text-slate-600">Gérer les comptes utilisateurs.</p>
+
+  <div v-if="userStore.isLoading" class="mt-4 text-sm text-slate-600">
+    En cours...
+  </div>
+
+  <div v-else class="mt-4 space-y-3">
+
+    <div
+      v-for="u in userStore.users"
+      :key="u.id"
+      class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm"
+    >
+
+      <!-- INFOS USER -->
+      <div class="min-w-0">
+        <div class="font-semibold text-slate-900 truncate">
+          {{ u.email }}
+        </div>
+        <div class="text-slate-600 text-xs sm:text-sm">
+          Rôle : {{ u.role }}
+        </div>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="flex w-full sm:w-auto flex-col sm:flex-row gap-2 sm:gap-2">
+
+        <button
+          class="w-full sm:w-auto rounded-xl bg-indigo-600 px-3 py-2 text-xs font-semibold text-white hover:bg-indigo-500"
+          type="button"
+          @click="openModal(u)"
+        >
+          Modifier
+        </button>
+
+        <button
+          class="w-full sm:w-auto rounded-xl bg-rose-600 px-3 py-2 text-xs font-semibold text-white hover:bg-rose-500"
           type="button"
           @click="onDelete(u.id)"
-          >
+        >
           Supprimer
         </button>
-      </div>
-        </div>
 
-        <div v-if="userStore.users.length === 0" class="text-sm text-slate-600">Pas encore d'utilisateurs.</div>
       </div>
+
     </div>
+
+    <div
+      v-if="userStore.users.length === 0"
+      class="text-sm text-slate-600"
+    >
+      Pas encore d'utilisateurs.
+    </div>
+
+  </div>
+</div>
   </AppLayout>
 </template>
