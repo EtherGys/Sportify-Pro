@@ -3,7 +3,6 @@ import { onMounted, ref } from 'vue'
 import { useToast } from 'vue-toast-notification'
 import AppLayout from '../../layouts/AppLayout.vue'
 import SessionCard from '../../components/SessionCard.vue'
-import SessionForm from '../../components/SessionForm.vue'
 import { useSessionStore } from '../../stores/session.store'
 import type { Session } from '../../types/session'
 
@@ -18,29 +17,9 @@ const form = ref({
   duration: 0,
   maxParticipants: 0,
 })
-const isCreating = ref(false)
 
 async function fetch() {
   await sessionStore.fetch({ page: 1, limit: 30 })
-}
-
-async function onCreate(payload: {
-  title: string
-  description?: string
-  date: string
-  duration?: number
-  maxParticipants: number
-  coachId?: number
-}) {
-  isCreating.value = true
-  try {
-    await sessionStore.create(payload)
-    toast.success('Session created')
-  } catch {
-    toast.error('Create failed')
-  } finally {
-    isCreating.value = false
-  }
 }
 
 async function submitUpdate() {
