@@ -1,4 +1,4 @@
-# Sport Coaching Frontend
+# Sportify Pro - FRONTEND
 
 Modern Vue 3 (Composition API) frontend with TypeScript (strict), consuming a JWT-secured REST API.
 
@@ -47,13 +47,7 @@ meta: {
 
 ## Environment Variables
 
-Create a `.env` file:
-
-```bash
-cp .env.example .env
-```
-
-Set:
+The `.env` file is already available since it only expose the port of the backen:
 
 - `VITE_API_BASE_URL` (example: `http://localhost:4000/api`)
 

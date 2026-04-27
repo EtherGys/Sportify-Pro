@@ -1,4 +1,4 @@
-# Sport Coaching Backend
+# Sportify Pro - BACKEND
 
 Production-ready Node.js backend for a sports coaching sessions platform.
 
@@ -12,7 +12,7 @@ Production-ready Node.js backend for a sports coaching sessions platform.
 - Zod validation
 - Swagger (OpenAPI)
 - Jest unit tests
-- Docker + docker-compose
+- Docker
 
 ## Project Architecture
 
