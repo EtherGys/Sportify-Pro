@@ -13,8 +13,19 @@ const userRepository = {
   listUsers() {
     return prisma.user.findMany({ include: { role: true, coach: true, admin: true } });
   },
-  deleteUser(id) {
+  async deleteUser(id) {
+    await prisma.coach.deleteMany({ where: { userId: id } });
+    await prisma.admin.deleteMany({ where: { userId: id } });
     return prisma.user.delete({ where: { id } });
+  },
+  updateUser(id, email, role) {
+    return prisma.user.update({
+      where: { id },
+      data: {
+        email,
+        role,
+      },
+    });
   }
 };
 

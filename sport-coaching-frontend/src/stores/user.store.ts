@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import type { User } from '../types/user'
 import { userApi } from '../services/userApi'
+import type { RoleName } from '../types/role'
 
 interface UserState {
   users: User[]
@@ -24,6 +25,9 @@ export const useUserStore = defineStore('users', {
     async remove(id: number) {
       await userApi.remove(id)
       this.users = this.users.filter((u) => u.id !== id)
+    },
+    async update(id: number, email: string, roleName: RoleName) {
+     await userApi.update({id,  email, roleName })
     }
   }
 })

@@ -49,9 +49,9 @@ async function onLogout() {
   <header class="border-b border-slate-200 bg-white">
     <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4">
       <div class="flex items-center gap-3">
-        <div class="h-9 w-9 rounded-xl bg-indigo-600"></div>
+        <div class="h-9 w-9 rounded-xl bg-indigo-600 m-auto text-center pt-1 text-white">S</div>
         <div class="leading-tight">
-          <div class="text-sm font-semibold text-slate-900">Sportify</div>
+          <div class="text-sm font-semibold text-slate-900">Sportify Pro</div>
           <div class="text-xs text-slate-500" v-if="authStore.user">
             {{ authStore.user.email }} · {{ authStore.user.role }}
           </div>

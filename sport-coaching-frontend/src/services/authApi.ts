@@ -8,6 +8,12 @@ export interface RegisterPayload {
   roleName: RoleName
 }
 
+export interface UpdateUserPayload {
+  id: number
+  email: string
+  roleName: RoleName
+}
+
 export interface LoginPayload {
   email: string
   password: string

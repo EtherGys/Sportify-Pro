@@ -16,6 +16,17 @@ const userController = {
     } catch (error) {
       next(error);
     }
+  },
+  async update(req, res, next) {
+    try {
+      const { id, email, role } = req.body
+
+      await userService.updateUser(id, email, role)
+
+      res.status(204).send()
+    } catch (error) {
+      next(error)
+    }
   }
 };
 

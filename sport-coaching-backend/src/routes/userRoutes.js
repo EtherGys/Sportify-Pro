@@ -34,5 +34,6 @@ const router = express.Router();
  */
 router.get("/", authMiddleware, roleMiddleware("ADMIN"), userController.list);
 router.delete("/:id", authMiddleware, roleMiddleware("ADMIN"), userController.remove);
+router.put("/", authMiddleware, roleMiddleware("ADMIN"), userController.update);
 
 module.exports = router;
