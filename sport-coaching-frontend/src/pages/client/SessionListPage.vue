@@ -16,6 +16,9 @@ const limit = ref(10)
 const search = ref('')
 
 const total = computed(() => sessionStore.pagination?.total ?? 0)
+const totalPages = computed(() => {
+  return total.value > 0 ? Math.ceil(total.value / limit.value) : 1
+})
 const bookedSessionIds = computed(() => new Set(bookingStore.myBookings.map((b) => b.sessionId)))
 
 async function fetch() {
@@ -71,6 +74,12 @@ onMounted(fetch)
       <div v-else class="grid grid-cols-1 gap-4">
         <SessionCard v-for="s in sessionStore.items" :key="s.id" :session="s">
           <template #actions>
+             <div class="mt-1 text-sm text-slate-600">
+              Coach : <span class="font-semibold">{{ s.coach.user.email }}</span>
+            </div>
+            <div class="mt-1 text-sm text-slate-600 mb-4">
+              Nombre de participants actuels : <span class="font-semibold">{{ s.bookings.length }}</span>
+            </div>
             <BookingButton
               :is-loading="bookingStore.isLoading"
               :label="bookedSessionIds.has(s.id) ? 'Annuler' : 'Réserver'"
@@ -84,7 +93,7 @@ onMounted(fetch)
       </div>
 
       <div class="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 text-sm shadow-sm">
-        <div>Nbr de résultats : {{ total }}</div>
+        <div>Nbr total de résultats : {{ total }}</div>
         <div class="flex items-center gap-2">
           <button
             class="rounded-xl border border-slate-200 px-3 py-2 disabled:opacity-50"
@@ -93,10 +102,12 @@ onMounted(fetch)
           >
             <
           </button>
-          <div class="px-2">Page {{ page }}</div>
+         <div class="px-2">
+  Page {{ page }} / {{ totalPages }}
+</div>
           <button
             class="rounded-xl border border-slate-200 px-3 py-2 disabled:opacity-50"
-            :disabled="page * limit >= total"
+            :disabled="page >= totalPages"
             @click="page++; fetch()"
           >
             >
