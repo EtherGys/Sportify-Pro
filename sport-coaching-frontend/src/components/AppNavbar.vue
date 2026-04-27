@@ -27,7 +27,7 @@ const links = computed(() => {
 
   if (role.value === Role.COACH) {
     return [
-      { name: 'Dashboard', to: { name: 'coach.dashboard' } },
+      { name: 'Mon planning', to: { name: 'coach.dashboard' } },
       { name: 'Gérer mes séances', to: { name: 'coach.manageSessions' } }
     ]
   }

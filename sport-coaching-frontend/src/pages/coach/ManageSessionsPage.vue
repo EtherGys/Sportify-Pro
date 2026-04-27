@@ -113,7 +113,7 @@ onMounted(fetch)
           <button class="w-full sm:w-auto px-3 py-2 bg-gray-300 rounded-lg text-sm" @click="isModalOpen = false">
             Annuler
           </button>
-          <button class="w-full sm:w-auto px-3 py-2 bg-indigo-600 text-white rounded-lg text-sm">
+          <button @click="submitUpdate" class="w-full sm:w-auto px-3 py-2 bg-indigo-600 text-white rounded-lg text-sm">
             Valider
           </button>
         </div>

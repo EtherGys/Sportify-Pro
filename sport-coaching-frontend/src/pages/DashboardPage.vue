@@ -36,6 +36,14 @@ const role = computed(() => authStore.user?.role ?? null)
 
         <RouterLink
           v-if="role === Role.COACH"
+          :to="{ name: 'coach.dashboard' }"
+          class="rounded-2xl border border-slate-200 bg-slate-50 p-4 hover:bg-slate-100"
+        >
+          <div class="text-sm font-semibold text-slate-900">Voir mon planning</div>
+          <div class="text-sm text-slate-600">Consulter votre planning de la semaine et le détails des séances</div>
+        </RouterLink>
+        <RouterLink
+          v-if="role === Role.COACH"
           :to="{ name: 'coach.manageSessions' }"
           class="rounded-2xl border border-slate-200 bg-slate-50 p-4 hover:bg-slate-100"
         >
