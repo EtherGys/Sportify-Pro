@@ -301,7 +301,3 @@ npx prisma generate
 - **Docker Internal**: Use `db:3306` (Docker network)
 - **Port Conflicts**: Ensure ports 3306, 4000, 5173, and 3000 are available
 - **Database Persistence**: Docker volumes persist MySQL data between container restarts
-
-## License
-
-ISC
