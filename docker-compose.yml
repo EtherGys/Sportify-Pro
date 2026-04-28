@@ -1,0 +1,60 @@
+networks:
+  sportify_pro_network:
+    name: sportify_pro_network
+
+services:
+  db:
+    image: mysql:8.4
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+      start_period: 20s
+    container_name: sportify_pro_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: sportify_pro_db
+    volumes:
+      - sportify_pro_mysql_data:/var/lib/mysql
+    networks:
+      - sportify_pro_network
+
+  backend:
+    build:
+      context: ./sport-coaching-backend
+      dockerfile: Dockerfile
+    container_name: sportify_pro_backend
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "4000:4000"
+    networks:
+      - sportify_pro_network
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      DB_NAME: sportify_pro_db
+
+  frontend:
+    build:
+      context: ./sport-coaching-frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: http://localhost:4000/api
+    container_name: sportify_pro_frontend
+    depends_on:
+      - backend
+    networks:
+      - sportify_pro_network
+    ports:
+      - "3000:80"
+    restart: always
+
+volumes:
+  sportify_pro_mysql_data:
+    name: sportify_pro_mysql_data
+
