@@ -90,7 +90,7 @@ onMounted(fetch)
       <div class="space-y-4">
         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <h2 class="text-lg font-semibold text-slate-900">Gestion des séances</h2>
-          <p class="mt-1 text-sm text-slate-600">Vous pouvez modifier, supprimer ou réassigner le coach d'une séance de
+          <p class="mt-1 text-sm text-slate-600">Vous pouvez modifier et consulter une séance de
             sport.</p>
         </div>
         <SessionCard v-for="s in sessionStore.items" :key="s.id" :session="s">

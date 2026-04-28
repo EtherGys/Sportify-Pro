@@ -66,7 +66,7 @@ const role = computed(() => authStore.user?.role ?? null)
           class="rounded-2xl border border-slate-200 bg-slate-50 p-4 hover:bg-slate-100"
         >
           <div class="text-sm font-semibold text-slate-900">Gérer les séances proposées</div>
-          <div class="text-sm text-slate-600">Créer, mettez à jour ou assigner l'assignation du coach</div>
+          <div class="text-sm text-slate-600">Créer, mettez à jour toutes les séances</div>
         </RouterLink>
       </div>
     </div>
