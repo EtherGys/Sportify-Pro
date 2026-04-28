@@ -1,9 +1,10 @@
 # Sportify Pro
 
-Production-ready Node.js backend for a sports coaching sessions platform.
+Production-ready full-stack application for a sports coaching sessions platform.
 
 ## Tech Stack
 
+### Backend
 - Node.js + Express.js
 - MySQL
 - Prisma ORM
@@ -12,32 +13,58 @@ Production-ready Node.js backend for a sports coaching sessions platform.
 - Zod validation
 - Swagger (OpenAPI)
 - Jest unit tests
-- Docker + docker-compose
 
-## Project Architecture
+### Frontend
+- Vue 3 + TypeScript
+- Vite
+- Pinia (state management)
+- Vue Router
+- Tailwind CSS + PostCSS
+- Axios HTTP client
 
-```text
-src/
-  config/
-  controllers/
-  middlewares/
-  repositories/
-  routes/
-  services/
-  utils/
-  validators/
-prisma/
-tests/
+### DevOps
+- Docker + Docker Compose
+
+## Project Structure
+
+```
+sportify_pro/
+├── sport-coaching-backend/
+│   ├── src/
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── middlewares/
+│   │   ├── repositories/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   └── validators/
+│   ├── prisma/
+│   ├── tests/
+│   ├── Dockerfile
+│   ├── .env
+│   └── package.json
+├── sport-coaching-frontend/
+│   ├── src/
+│   ├── public/
+│   ├── Dockerfile
+│   ├── nginx.conf
+│   └── package.json
+└── docker-compose.yml
 ```
 
-## Prisma Schema
+## Database Schema
 
-See `prisma/schema.prisma` for the complete relational model with:
+The application uses Prisma ORM with:
 
-- `Role`, `User`, `Coach`, `Admin`, `Session`, `Booking`
-- enum role management
-- unique booking constraints
-- date indexing for sessions
+- `Role` - ADMIN, COACH, CLIENT
+- `User` - Email, password, role assignment
+- `Coach` - Coach profile linked to User
+- `Admin` - Admin profile linked to User
+- `Session` - Coaching session details, coach assignment, capacity
+- `Booking` - User booking for sessions
+
+See [sport-coaching-backend/prisma/schema.prisma](sport-coaching-backend/prisma/schema.prisma) for full schema.
 
 ## Business Rules Implemented
 
@@ -51,121 +78,230 @@ See `prisma/schema.prisma` for the complete relational model with:
 - Time-slot conflict prevention (same user, overlapping slot)
 - Participant visibility restricted to coach owner/admin
 
-## Getting Started
+## Getting Started (Local Development)
 
-1. Install dependencies:
+### Prerequisites
 
+- Node.js 22+
+- MySQL 8.4+
+- npm
+
+### Backend Setup
+
+1. Navigate to backend:
+```bash
+cd sport-coaching-backend
+```
+
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-2. Configure environment:
-
-```bash
-cp .env.example .env
+3. Update `.env` with your local MySQL credentials:
+```env
+PORT=4000
+NODE_ENV=development
+DATABASE_URL=mysql://root:your_password@localhost:3306/sport_coaching_db
+JWT_SECRET=your_secret_key
+JWT_EXPIRES_IN=1d
 ```
 
-3. Start MySQL (Docker):
-
+4. Run database migrations and seed:
 ```bash
-docker compose up -d db
-```
-
-4. Run migrations and generate Prisma client:
-
-```bash
-npx prisma migrate dev --name init
-npx prisma generate
-```
-
-5. Seed data:
-
-```bash
+npx prisma migrate dev
 npm run prisma:seed
 ```
 
-6. Run API:
-
+5. Start backend:
 ```bash
 npm run dev
 ```
 
-## API Documentation
+Backend API runs on `http://localhost:4000`
 
-Swagger UI: `http://localhost:4000/api-docs`
+### Frontend Setup
 
-## Tests
-
+1. Navigate to frontend (from project root):
 ```bash
-npm test
+cd sport-coaching-frontend
 ```
 
-## Docker Full Stack (Recommended)
-Run the full application (MySQL + Backend + Frontend):
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start development server:
+```bash
+npm run dev
+```
+
+Frontend runs on `http://localhost:5173`
+
+### Accessing the Application
+
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:4000/api
+- **API Documentation**: http://localhost:4000/api-docs
+
+## Development Commands
+
+### Backend
+
+```bash
+npm run dev              # Start with nodemon (auto-reload)
+npm run start            # Start production server
+npm test                 # Run unit tests
+npm test -- --coverage  # Run tests with coverage
+npm run test:watch      # Watch mode tests
+npm run prisma:seed     # Run database seed
+npm run prisma:migrate  # Create/run migrations
+npx prisma studio      # Open Prisma Studio (GUI)
+```
+
+### Frontend
+
+```bash
+npm run dev      # Start Vite dev server with hot reload
+npm run build    # Build for production
+npm run preview  # Preview production build
+```
+
+## Docker Deployment
+
+Run the complete full-stack application with Docker Compose.
+
+### Prerequisites
+
+- Docker Engine 24+
+- Docker Compose 2+
+
+### Launch
+
+From the project root:
 
 ```bash
 docker compose up --build
 ```
-### Services
-Backend API : `http://localhost:4000`
-Frontend :`http://localhost:3000`
-Swagger : `http://localhost:4000/api-docs`
 
+This will start:
+- **MySQL Database** (port 3306, exposed for debugging)
+- **Backend API** (port 4000)
+- **Frontend** (port 3000)
 
-## Environment Variables
-Create a .env file at the root:
+### Access Services
 
-```env
-MYSQL_ROOT_PASSWORD=root
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:4000/api
+- **API Documentation**: http://localhost:4000/api-docs
 
-PORT=4000
-NODE_ENV=development
-DATABASE_URL=mysql://root:root@db:3306/sportify_pro_db
-JWT_SECRET=your_secret
-JWT_EXPIRES_IN=1d
-```
+### Database Auto-Initialization
 
-# Important Notes (Docker Networking)
-- Inside Docker, services communicate using their service names:
-  - db → MySQL
-  - backend → API
-
-- From your browser:
-  - use localhost, NOT backend
-
-# Database Initialization
-On startup, the backend automatically:
-
-- syncs the database schema (prisma db push)
-- runs seed data (prisma db seed)
+On startup, the Docker backend automatically:
+- Runs database migrations
+- Seeds the database with test data
 
 No manual setup required.
 
-# Manual Commands (optional)
-Run Prisma commands manually inside the container:
+### Stop Services
 
 ```bash
-docker compose exec backend npx prisma studio
-docker compose exec backend npx prisma db push
-docker compose exec backend npm run prisma:seed
-```
-## Local Development (without Docker)
-
-```bash
-npm install
-cp .env.example .env
+docker compose down          # Stop all services
+docker compose down -v       # Stop and remove volumes (resets database)
 ```
 
-Update your DB URL for local usage:
+### Docker Networking
+
+Inside the Docker network:
+- Services communicate using service names:
+  - `db` → MySQL (port 3306)
+  - `api` → Backend API
+  - `frontend` → Frontend web server
+
+From your browser on the host machine:
+- Use `localhost`, NOT service names
+
+## Environment Variables
+
+### Backend (.env)
 
 ```env
-DATABASE_URL=mysql://root:root@localhost:3306/sportify_pro_db
+# Server Configuration
+PORT=4000
+NODE_ENV=development
+
+# Database Connection
+# Local: mysql://root:password@localhost:3306/sport_coaching_db
+# Docker: mysql://root:root@db:3306/sport_coaching_db
+DATABASE_URL=mysql://root:your_password@localhost:3306/sport_coaching_db
+
+# JWT Authentication
+JWT_SECRET=your_secret_key_here
+JWT_EXPIRES_IN=1d
 ```
 
-Then:
+### Frontend (.env)
+
+Frontend uses environment variables for API configuration (set in Docker build args).
+
+## Testing
+
+### Backend Unit Tests
 
 ```bash
-npx prisma migrate dev
-npm run prisma:seed
-npm run dev
+cd sport-coaching-backend
+npm test                 # Run all tests once
+npm test -- --coverage  # Generate coverage report
+npm run test:watch      # Watch mode
 ```
+
+## API Documentation
+
+Swagger UI provides interactive API documentation with:
+- All available endpoints
+- Request/response schemas
+- Authentication requirements
+- Example payloads
+
+Accessible at: `http://localhost:4000/api-docs`
+
+## Troubleshooting
+
+### Port Already in Use
+
+**Check port usage (Windows):**
+```powershell
+netstat -ano | findstr ":3306"
+```
+
+**Stop MySQL service (Windows):**
+```powershell
+net stop MySQL
+```
+
+### Docker Database Connection Error
+
+```bash
+# Reset database volume and restart
+docker compose down -v
+docker compose up --build
+```
+
+### Prisma Client Issues
+
+```bash
+# Regenerate Prisma client
+npx prisma generate
+```
+
+## Notes
+
+- **Local Development**: Use `localhost:3306` for MySQL
+- **Docker Internal**: Use `db:3306` (Docker network)
+- **Port Conflicts**: Ensure ports 3306, 4000, 5173, and 3000 are available
+- **Database Persistence**: Docker volumes persist MySQL data between container restarts
+
+## License
+
+ISC
