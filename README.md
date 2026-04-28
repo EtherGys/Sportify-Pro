@@ -100,16 +100,72 @@ Swagger UI: `http://localhost:4000/api-docs`
 npm test
 ```
 
-## Docker Full Stack
+## Docker Full Stack (Recommended)
+Run the full application (MySQL + Backend + Frontend):
 
 ```bash
 docker compose up --build
 ```
+### Services
+Backend API : `http://localhost:4000`
+Frontend :`http://localhost:3000`
+Swagger : `http://localhost:4000/api-docs`
+
 
 ## Environment Variables
+Create a .env file at the root:
 
-- `PORT`
-- `NODE_ENV`
-- `DATABASE_URL` (example: `mysql://root:root@localhost:3306/sport_coaching_db`)
-- `JWT_SECRET`
-- `JWT_EXPIRES_IN`
+```env
+MYSQL_ROOT_PASSWORD=root
+
+PORT=4000
+NODE_ENV=development
+DATABASE_URL=mysql://root:root@db:3306/sportify_pro_db
+JWT_SECRET=your_secret
+JWT_EXPIRES_IN=1d
+```
+
+# Important Notes (Docker Networking)
+- Inside Docker, services communicate using their service names:
+  - db → MySQL
+  - backend → API
+
+- From your browser:
+  - use localhost, NOT backend
+
+# Database Initialization
+On startup, the backend automatically:
+
+- syncs the database schema (prisma db push)
+- runs seed data (prisma db seed)
+
+No manual setup required.
+
+# Manual Commands (optional)
+Run Prisma commands manually inside the container:
+
+```bash
+docker compose exec backend npx prisma studio
+docker compose exec backend npx prisma db push
+docker compose exec backend npm run prisma:seed
+```
+## Local Development (without Docker)
+
+```bash
+npm install
+cp .env.example .env
+```
+
+Update your DB URL for local usage:
+
+```env
+DATABASE_URL=mysql://root:root@localhost:3306/sportify_pro_db
+```
+
+Then:
+
+```bash
+npx prisma migrate dev
+npm run prisma:seed
+npm run dev
+```
