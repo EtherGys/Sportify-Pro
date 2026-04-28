@@ -47,7 +47,6 @@ async function onSubmit() {
         <select v-model="roleName" class="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm">
           <option :value="Role.CLIENT">CLIENT</option>
           <option :value="Role.COACH">COACH</option>
-          <option :value="Role.ADMIN">ADMIN</option>
         </select>
       </div>
       <button
