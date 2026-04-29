@@ -69,7 +69,7 @@ See [sport-coaching-backend/prisma/schema.prisma](sport-coaching-backend/prisma/
 ## Business Rules Implemented
 
 - Full JWT authentication flow (`register`, `login`)
-- Role-based permissions for `CLIENT`, `COACH`, `ADMIN` (To test all actions by role, you can change your admin user by checking all available users in the seed.js file)
+- Role-based permissions for `CLIENT`, `COACH`, `ADMIN` (To test all actions by role, you can use the admin user by checking all available users in [sport-coaching-backend/prisma/seed.js](sport-coaching-backend/prisma/seed.js))
 - Coach can manage only own sessions
 - Admin can manage all sessions and users
 - Mandatory coach assignment for each session
