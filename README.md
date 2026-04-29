@@ -78,7 +78,149 @@ See [sport-coaching-backend/prisma/schema.prisma](sport-coaching-backend/prisma/
 - Time-slot conflict prevention (same user, overlapping slot)
 - Participant visibility restricted to coach owner/admin
 
-## Getting Started (Local Development)
+## Docker Deployment (REcommended)
+
+Run the complete full-stack application with Docker Compose.
+
+### Prerequisites
+
+- Docker Engine 24+
+- Docker Compose 2+
+- If you're on Windows, check the encoding of the bash file "docker-entrypoint.sh", the file has to be in LF line sequence and not CRLF. To change the encoding, open the file and change the end of line sequence encoding type from CRLF -> LF
+
+## Environment Variables
+
+### Backend (.env)
+
+Navigate to backend:
+```bash
+cd sport-coaching-backend
+```
+
+Create an .env file (get inspiration from the .env.example file)
+```env
+# Server Configuration
+PORT=4000
+NODE_ENV=development
+
+# Database Connection
+# Local: mysql://root:password@localhost:3306/sport_coaching_db
+# Docker: mysql://root:root@db:3306/sport_coaching_db
+DATABASE_URL=mysql://root:your_password@localhost:3306/sport_coaching_db
+
+# JWT Authentication
+JWT_SECRET=your_secret_key_here
+JWT_EXPIRES_IN=1d
+```
+
+### Frontend (.env)
+
+Frontend uses environment variables for API configuration (set in Docker build args).
+
+
+### Launch
+
+From the project root:
+
+```bash
+docker compose up --build
+```
+
+This will start:
+- **MySQL Database** (port 3306, exposed for debugging)
+- **Backend API** (port 4000)
+- **Frontend** (port 3000)
+
+### Access Services
+
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:4000/api
+- **API Documentation**: http://localhost:4000/api-docs
+
+### Database Auto-Initialization
+
+On startup, the Docker backend automatically:
+- Runs database migrations
+- Seeds the database with test data
+
+No manual setup required.
+
+### Stop Services
+
+```bash
+docker compose down          # Stop all services
+docker compose down -v       # Stop and remove volumes (resets database)
+```
+
+### Docker Networking
+
+Inside the Docker network:
+- Services communicate using service names:
+  - `db` → MySQL (port 3306)
+  - `api` → Backend API
+  - `frontend` → Frontend web server
+
+From your browser on the host machine:
+- Use `localhost`, NOT service names
+
+## Testing
+
+### Backend Unit Tests
+
+```bash
+cd sport-coaching-backend
+npm test                 # Run all tests once
+npm test -- --coverage  # Generate coverage report
+npm run test:watch      # Watch mode
+```
+
+## API Documentation
+
+Swagger UI provides interactive API documentation with:
+- All available endpoints
+- Request/response schemas
+- Authentication requirements
+- Example payloads
+
+Accessible at: `http://localhost:4000/api-docs`
+
+## Troubleshooting
+
+### Port Already in Use
+
+**Check port usage (Windows):**
+```powershell
+netstat -ano | findstr ":3306"
+```
+
+**Stop MySQL service (Windows):**
+```powershell
+net stop MySQL
+```
+
+### Docker Database Connection Error
+
+```bash
+# Reset database volume and restart
+docker compose down -v
+docker compose up --build
+```
+
+### Prisma Client Issues
+
+```bash
+# Regenerate Prisma client
+npx prisma generate
+```
+
+## Notes
+
+- **Local Development**: Use `localhost:3306` for MySQL
+- **Docker Internal**: Use `db:3306` (Docker network)
+- **Port Conflicts**: Ensure ports 3306, 4000, 5173, and 3000 are available
+- **Database Persistence**: Docker volumes persist MySQL data between container restarts
+
+## Local Development
 
 ### Prerequisites
 
@@ -168,136 +310,3 @@ npm run build    # Build for production
 npm run preview  # Preview production build
 ```
 
-## Docker Deployment
-
-Run the complete full-stack application with Docker Compose.
-
-### Prerequisites
-
-- Docker Engine 24+
-- Docker Compose 2+
-
-### Launch
-
-From the project root:
-
-```bash
-docker compose up --build
-```
-
-This will start:
-- **MySQL Database** (port 3306, exposed for debugging)
-- **Backend API** (port 4000)
-- **Frontend** (port 3000)
-
-### Access Services
-
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:4000/api
-- **API Documentation**: http://localhost:4000/api-docs
-
-### Database Auto-Initialization
-
-On startup, the Docker backend automatically:
-- Runs database migrations
-- Seeds the database with test data
-
-No manual setup required.
-
-### Stop Services
-
-```bash
-docker compose down          # Stop all services
-docker compose down -v       # Stop and remove volumes (resets database)
-```
-
-### Docker Networking
-
-Inside the Docker network:
-- Services communicate using service names:
-  - `db` → MySQL (port 3306)
-  - `api` → Backend API
-  - `frontend` → Frontend web server
-
-From your browser on the host machine:
-- Use `localhost`, NOT service names
-
-## Environment Variables
-
-### Backend (.env)
-
-```env
-# Server Configuration
-PORT=4000
-NODE_ENV=development
-
-# Database Connection
-# Local: mysql://root:password@localhost:3306/sport_coaching_db
-# Docker: mysql://root:root@db:3306/sport_coaching_db
-DATABASE_URL=mysql://root:your_password@localhost:3306/sport_coaching_db
-
-# JWT Authentication
-JWT_SECRET=your_secret_key_here
-JWT_EXPIRES_IN=1d
-```
-
-### Frontend (.env)
-
-Frontend uses environment variables for API configuration (set in Docker build args).
-
-## Testing
-
-### Backend Unit Tests
-
-```bash
-cd sport-coaching-backend
-npm test                 # Run all tests once
-npm test -- --coverage  # Generate coverage report
-npm run test:watch      # Watch mode
-```
-
-## API Documentation
-
-Swagger UI provides interactive API documentation with:
-- All available endpoints
-- Request/response schemas
-- Authentication requirements
-- Example payloads
-
-Accessible at: `http://localhost:4000/api-docs`
-
-## Troubleshooting
-
-### Port Already in Use
-
-**Check port usage (Windows):**
-```powershell
-netstat -ano | findstr ":3306"
-```
-
-**Stop MySQL service (Windows):**
-```powershell
-net stop MySQL
-```
-
-### Docker Database Connection Error
-
-```bash
-# Reset database volume and restart
-docker compose down -v
-docker compose up --build
-```
-
-### Prisma Client Issues
-
-```bash
-# Regenerate Prisma client
-npx prisma generate
-```
-
-## Notes
-
-- **Local Development**: Use `localhost:3306` for MySQL
-- **Docker Internal**: Use `db:3306` (Docker network)
-- **Port Conflicts**: Ensure ports 3306, 4000, 5173, and 3000 are available
-- **Database Persistence**: Docker volumes persist MySQL data between container restarts
