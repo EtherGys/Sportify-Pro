@@ -310,3 +310,15 @@ npm run build    # Build for production
 npm run preview  # Preview production build
 ```
 
+# Choix Techniques
+## Frontend
+Vue.Js avec Typescript permet à la fois de garantir la stabilité et la cohérence des typages, et Vue.Js permet d'avoir une application web performante.
+
+L’utilisation de Tailwind CSS permet de gérer correctement le CSS et de le rendre plus lisible que du CSS brut. C'est également une solution bien plus personnalisable que par exemple BootStrap.
+## Backend
+Node.Js avec Express permet de développer rapidement une API REST, ce qui convient parfaitement à notre cas présent.
+L'utilisation de l'ORM Prisma semblait nécessaire au projet pour sécuriser typage, mais aussi pour gérer efficacement les schémas de données, et simplifier les requêtes à la base de données. Les requêtes sont également plus lisibles.
+
+L’architecture en couches (Controller / Service / Repository) a été mise en place pour séparer clairement les responsabilités.
+## Docker
+L'utilisation de Docker permet de garantir l'uniformité de l'environnement de déploiement, ainsi que la rapidité et la facilité de mise en place de l'application (même en test de conteneurisation en local)
