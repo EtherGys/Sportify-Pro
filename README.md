@@ -69,16 +69,16 @@ See [sport-coaching-backend/prisma/schema.prisma](sport-coaching-backend/prisma/
 ## Business Rules Implemented
 
 - Full JWT authentication flow (`register`, `login`)
-- Role-based permissions for `CLIENT`, `COACH`, `ADMIN`
+- Role-based permissions for `CLIENT`, `COACH`, `ADMIN` (To test all actions by role, you can change your admin user by checking all available users in the seed.js file)
 - Coach can manage only own sessions
 - Admin can manage all sessions and users
 - Mandatory coach assignment for each session
 - Session capacity enforcement
 - Duplicate booking prevention
 - Time-slot conflict prevention (same user, overlapping slot)
-- Participant visibility restricted to coach owner/admin
+- Participant visibility restricted to coach owner
 
-## Docker Deployment (REcommended)
+## Docker Deployment (Recommended)
 
 Run the complete full-stack application with Docker Compose.
 
